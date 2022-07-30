@@ -143,18 +143,18 @@ class Render(object):
       x += self.inc
 
 
-  def load(self, filename, translate, scale):
-    model = Obj(filename)
+  def glLoad(self, filename, translate, scale):
+    archivo = Obj(filename)
     
-    for face in model.faces:
+    for face in archivo.faces:
       vcount = len(face)
 
       for j in range(vcount):
         f1 = face[j][0]
         f2 = face[(j + 1) % vcount][0]
 
-        v1 = model.vertex[f1 - 1]
-        v2 = model.vertex[f2 - 1]
+        v1 = archivo.vertex[f1 - 1]
+        v2 = archivo.vertex[f2 - 1]
         
         x1 = ((v1[0] + translate[0]) * scale[0])
         y1 = ((v1[1] + translate[1]) * scale[1])
@@ -169,17 +169,26 @@ class Obj(object):
     with open(filename) as f:
       self.lines = f.read().splitlines()
 
-    self.vertex = []
-    self.faces = []
-    self.read()
+    self.vertex = []  #v
+    self.faces = [] #f
 
-  def read(self):
     for line in self.lines:
       if line:
         prefix, value = line.split(' ', 1)
 
         if prefix == 'v':
-          self.vertex.append(list(map(float, value.split(' '))))
+          temp = value.split(' ')
+          tempArray = []
+
+          for tempValue in temp:
+            tempArray.append((float(tempValue)))
+
+          self.vertex.append(tempArray)
+
+          
         elif prefix == 'f':
-          self.faces.append([list(map(int , face.split('/'))) for face in value.split(' ')])
+          self.faces.append([
+            list(map(int , face.split('/')))
+            for face in value.split(' ')
+          ])
 
