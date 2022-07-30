@@ -150,11 +150,8 @@ class Render(object):
       vcount = len(face)
 
       for j in range(vcount):
-        f1 = face[j][0]
-        f2 = face[(j + 1) % vcount][0]
-
-        v1 = archivo.vertex[f1 - 1]
-        v2 = archivo.vertex[f2 - 1]
+        v1 = archivo.vertex[(face[j][0]) - 1]
+        v2 = archivo.vertex[(face[(j + 1) % vcount][0]) - 1]
         
         x1 = ((v1[0] + translate[0]) * scale[0])
         y1 = ((v1[1] + translate[1]) * scale[1])
@@ -187,8 +184,17 @@ class Obj(object):
 
           
         elif prefix == 'f':
-          self.faces.append([
-            list(map(int , face.split('/')))
-            for face in value.split(' ')
-          ])
+          temp = value.split(' ')
+          tempArray = []
+          
+          for tempValue in temp:
+            temp2 = tempValue.split('/')
+            tempArray2 = []
+
+            for tempValue2 in temp2:
+              tempArray2.append((int(tempValue2)))
+
+            tempArray.append(tempArray2)
+          
+          self.faces.append(tempArray)
 
